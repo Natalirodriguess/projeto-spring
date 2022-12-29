@@ -1,0 +1,31 @@
+version: '2'
+
+services:
+  app:
+    image: 'api:latest'
+    build:
+      context: .
+    container_name: app
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/natybank
+      - SPRING_DATASOURCE_USERNAME=natybank
+      - SPRING_DATASOURCE_PASSWORD=natybank
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+
+    networks:
+      - app-network
+
+  db:
+    image: 'postgres:13.1-alpine'
+    container_name: db
+    environment:
+      - POSTGRES_USER=natybank
+      - POSTGRES_PASSWORD=natybank
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
